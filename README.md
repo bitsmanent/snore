@@ -2,7 +2,8 @@ snore - sleep with feedback
 ===========================
 
 SYNOPSIS
-	snore [-v] [NUMBER[SUFFIX]...]
+
+    snore [-v] [NUMBER[SUFFIX]...]
 
 snore pause for NUMBER seconds. SUFFIX may be 's' for seconds, 'm' for minutes,
 'h' four hours or 'd' for days. If the suffix is wrong or not given 's' is

@@ -1,0 +1,20 @@
+.TH SNORE 1 snore\-VERSION
+.SH NAME
+snore \- sleep with feedback
+.SH SYNOPSIS
+.B snore
+.RB [ \-v ]
+.RI [ NUMBER ...]
+.SH DESCRIPTION
+.B snore
+pause for NUMBER seconds. SUFFIX may be 's' for seconds, 'm' for minutes, 'h'
+four hours or 'd' for days. If the suffix is wrong or not given 's' is default.
+Given two or more arguments, pause for the amount of time specified by the sum
+of their values. A visual feedback is given by printing the flowing of time in
+both ascending and descending order.
+.SH AUTHORS
+See the LICENSE file for the authors.
+.SH LICENSE
+See the LICENSE file for the terms of redistribution.
+.SH SEE ALSO
+.BR sleep (1)

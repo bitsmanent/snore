@@ -11,6 +11,17 @@ for the amount of time specified by the sum of their values. A visual feedback
 is given by printing the flowing of time in both ascending and descending
 order.
 
+SHORTCUTS
+
+    Enter  output the split time
+
+    Ctrl-s pause execution
+
+    Ctrl-q resume execution
+
+
+You may stop
+
 Installation
 ------------
 Edit config.mk to match your local setup (snore is installed into the

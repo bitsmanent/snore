@@ -7,11 +7,21 @@ snore \- sleep with feedback
 .RI "" NUMBER [ SUFFIX ]... 
 .SH DESCRIPTION
 .B snore
-snore pause for NUMBER seconds. SUFFIX may be 's' for seconds (default), 'm'
+pause for NUMBER seconds. SUFFIX may be 's' for seconds (default), 'm'
 for minutes, 'h' four hours or 'd' for days. Given two or more arguments, pause
 for the amount of time specified by the sum of their values. A visual feedback
 is given by printing the flowing of time in both ascending and descending
 order.
+.SH SHORTCUTS
+.TP
+.B Enter
+output the split time
+.TP
+.B Ctrl-s
+pause
+.TP
+.B Ctrl-q
+resume
 .SH AUTHORS
 See the LICENSE file for the authors.
 .SH LICENSE

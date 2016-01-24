@@ -20,8 +20,6 @@ SHORTCUTS
     Ctrl-q resume execution
 
 
-You may stop
-
 Installation
 ------------
 Edit config.mk to match your local setup (snore is installed into the

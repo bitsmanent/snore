@@ -88,11 +88,9 @@ main(int argc, char *argv[]) {
 	double tm, endtm;
 	int i;
 
-	if(argc < 2)
-		die("Usage: %s [-v] [time ...]\n", *argv);
-	if(!strcmp("-v", argv[1]))
+	if(argc == 2 && !strcmp("-v", argv[1]))
 		die("snore-"VERSION", © 2016 Claudio Alessi, see LICENSE for details\n");
-	
+
 	endtm = 0;
 	for(i = 1; i < argc; ++i) {
 		tm = time_to_sec(argv[i]);
@@ -101,10 +99,15 @@ main(int argc, char *argv[]) {
 		endtm += time_to_sec(argv[i]);
 	}
 
+	if(argc == 1 && !endtm)
+		endtm = symbols[LENGTH(symbols) - 1].mult;
+
 	for(tm = 0; tm < endtm; tm += DELTA) {
 		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(endtm - tm); /* descending */
+		if(endtm) {
+			printf(" | ");
+			time_print(endtm - tm); /* descending */
+		}
 		fflush(stdout);
 		usleep(TICK);
 		printf("%s", SCLEAR);

@@ -73,7 +73,7 @@ time_print(double tm) {
 
 	for(i = LENGTH(symbols) - 1; i >= 0; --i) {
 		piece = tm / symbols[i].mult;
-		snprintf(buf, sizeof buf, "%f", piece);
+		snprintf(buf, sizeof buf, "%09f", piece);
 		p = strrchr(buf, '.');
 		if(symbols[i].precision)
 			p += 1 + symbols[i].precision; /* truncate */

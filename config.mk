@@ -1,4 +1,4 @@
-# snore version
+# snore - sleep with feedback
 VERSION = 0.1
 
 # Customize below to fit your system

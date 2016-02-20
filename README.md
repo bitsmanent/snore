@@ -1,5 +1,7 @@
 snore - sleep with feedback
 ===========================
+<img src="https://raw.github.com/clamiax/snore/master/demo.gif" width="400" />
+
 
 SYNOPSIS
 

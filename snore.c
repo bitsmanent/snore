@@ -18,7 +18,7 @@ typedef struct symbol_t {
 } Symbol;
 
 void die(const char *errstr, ...);
-int time_to_sec(char *s);
+double time_to_sec(char *s);
 void time_print(double tm);
 
 /* must be in ascending order */
@@ -40,29 +40,37 @@ die(const char *errstr, ...) {
 	exit(1);
 }
 
-int
+double
 time_to_sec(char *s) {
-	int i, j, len;
-	char tmp[16];
+	int j;
+	double part, calculated;
+	char *parse_end, *string_end;
 
-	len = strlen(s);
-	for(i = 0; i < len; ++i) {
-		if(!ISCHR(s[i]))
-			continue;
-		for(j = 0; j < LENGTH(symbols); ++j) {
-			if(s[i] == symbols[j].sym) {
-				strncpy(tmp, s, i + 1);
-				return atoi(tmp) * symbols[j].mult;
+	calculated = 0.0;
+	string_end = s + strlen(s);
+
+	while(s < string_end) {
+		part = strtod(s, &parse_end);
+		if(parse_end == s) {
+			/* error parsing float */
+			return -1;
+		}
+		s = parse_end;
+		if(s < string_end) {
+			if(ISCHR(s[0])) {
+				for(j = 0; j < LENGTH(symbols); ++j) {
+					if(s[0] == symbols[j].sym) {
+						part *= symbols[j].mult;
+						s++;
+						break;
+					}
+				}
 			}
 		}
-
-		/* unsupported suffix */
-		return -1;
+		calculated += part;
 	}
 
-	/* no suffix specified, use the first */
-	strncpy(tmp, s, i + 1);
-	return atoi(tmp) * symbols[0].mult;
+	return calculated;
 }
 
 void

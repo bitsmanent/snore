@@ -7,7 +7,7 @@
 
 #define TICK		0250000
 #define DELTA		((double)TICK / 1000000)
-#define SCLEAR		"\r                                            \r"
+#define CLEAR		"\33[2K\r"
 #define LENGTH(X)	(sizeof X / sizeof X[0])
 #define ISCHR(c)	(c >= 'a' && c <= 'z')
 
@@ -23,7 +23,7 @@ void time_print(double tm);
 
 /* must be in ascending order */
 static Symbol symbols[] = {
-	/* symbol, multiplier, precision */
+	/* symbol  multiplier  precision */
 	{ 's',     1,          3 }, /* first is default (if no suffix) */
 	{ 'm',     60,         0 },
 	{ 'h',     3600,       0 },
@@ -116,7 +116,7 @@ main(int argc, char *argv[]) {
 		time_print(endtm - tm); /* descending */
 		fflush(stdout);
 		usleep(TICK);
-		printf("%s", SCLEAR);
+		printf("%s", CLEAR);
 	}
 	printf("\a%s elapsed\n", argv[1]);
 	return 0;

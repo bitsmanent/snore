@@ -48,7 +48,6 @@ time_to_sec(char *s) {
 
 	calculated = 0.0;
 	string_end = s + strlen(s);
-
 	while(s < string_end) {
 		part = strtod(s, &parse_end);
 		if(parse_end == s) {
@@ -67,7 +66,6 @@ time_to_sec(char *s) {
 		}
 		calculated += part;
 	}
-
 	return calculated;
 }
 
@@ -91,25 +89,19 @@ time_print(double tm) {
 
 int
 main(int argc, char *argv[]) {
-	double tm, endtm;
+	double endtm = 0, tm;
 	int i;
 
 	if(argc == 2 && !strcmp("-v", argv[1]))
 		die("snore-"VERSION", © 2016 Claudio Alessi, see LICENSE for details\n");
-
-	if(argc == 1) {
+	for(i = 1; i < argc; ++i) {
+		tm = time_to_sec(argv[i]);
+		if(tm < 0)
+			die("%s: wrong time\n", argv[i]);
+		endtm += time_to_sec(argv[i]);
+	}
+	if(!endtm)
 		endtm = symbols[LENGTH(symbols) - 1].mult;
-	}
-	else {
-		endtm = 0;
-		for(i = 1; i < argc; ++i) {
-			tm = time_to_sec(argv[i]);
-			if(tm < 0)
-				die("%s: wrong time\n", argv[i]);
-			endtm += time_to_sec(argv[i]);
-		}
-	}
-
 	for(tm = 0; tm < endtm; tm += DELTA) {
 		time_print(tm); /* ascending */
 		printf(" | ");

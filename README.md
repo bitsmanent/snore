@@ -29,3 +29,7 @@ Afterwards enter the following command to build and install snore (if
 necessary as root):
 
     make clean install
+
+Status
+------
+snore is considered complete and no further development is expected to happen.

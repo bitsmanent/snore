@@ -13,11 +13,13 @@ order. If no arguments are given, snore pauses for 1d (one day).
 
 SHORTCUTS
 
-    Enter  output the split time
+    Enter or Ctrl-j  show split time
 
-    Ctrl-s pause execution
+    Ctrl-s           pause execution
 
-    Ctrl-q resume execution
+    Ctrl-q           resume execution
+
+    Ctrl-c           stop and exit
 
 
 Installation

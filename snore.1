@@ -16,7 +16,7 @@ If no arguments are given,
 pauses for 1d (one day).
 .SH SHORTCUTS
 .TP
-.B Enter
+.B Enter or Ctrl-j
 output the split time
 .TP
 .B Ctrl-s
@@ -24,9 +24,13 @@ pause
 .TP
 .B Ctrl-q
 resume
+.TP
+.B Ctrl-c
+stop and exit
 .SH AUTHORS
 See the LICENSE file for the authors.
 .SH LICENSE
 See the LICENSE file for the terms of redistribution.
 .SH SEE ALSO
-.BR sleep (1)
+.BR sleep (1),
+.BR nanosleep (2)

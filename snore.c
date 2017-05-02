@@ -6,8 +6,8 @@
 #include <string.h>
 #include <time.h>
 
-#define TICK        1000
-#define DELTA       ((double)TICK / 10000000)
+#define TICK        0250000
+#define DELTA       ((double)TICK / 1000000)
 #define CLEAR	    "\33[2K\r"
 #define LENGTH(X)   (sizeof X / sizeof X[0])
 #define ISCHR(c)    (c >= 'a' && c <= 'z')
@@ -19,8 +19,7 @@ typedef struct symbol_t {
 } Symbol;
 
 void die(const char *errstr, ...);
-int nsleep(long nsec);
-void snore(double usec);
+int sleepu(double usec);
 double time_to_sec(char *s);
 void time_print(double tm);
 
@@ -44,29 +43,15 @@ die(const char *errstr, ...) {
 }
 
 int
-nsleep(long nsec) {
+sleepu(double usec) {
         struct timespec req, rem;
         int r;
 
         req.tv_sec = 0;
-        req.tv_nsec = nsec;
+        req.tv_nsec = usec * 1000;
         while((r = nanosleep(&req, &rem)) == -1 && errno == EINTR)
                 req = rem;
         return r;
-}
-
-void
-snore(double usec) {
-	double tm;
-
-	for(tm = 0; tm < usec; tm += DELTA) {
-		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(usec - tm); /* descending */
-		fflush(stdout);
-		nsleep(TICK);
-		printf("%s", CLEAR);
-	}
 }
 
 double
@@ -130,7 +115,14 @@ main(int argc, char *argv[]) {
 	}
 	if(!endtm)
 		endtm = symbols[LENGTH(symbols) - 1].mult;
-	snore(endtm);
+	for(tm = 0; tm < endtm; tm += DELTA) {
+		time_print(tm); /* ascending */
+		printf(" | ");
+		time_print(endtm - tm); /* descending */
+		fflush(stdout);
+		sleepu(TICK);
+		printf("%s", CLEAR);
+	}
 	printf("\a%s elapsed\n", argv[1]);
 	return 0;
 }

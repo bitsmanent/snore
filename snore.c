@@ -1,15 +1,16 @@
 /* See LICENSE for license details. */
+#include <errno.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+#include <time.h>
 
-#define TICK		0250000
-#define DELTA		((double)TICK / 1000000)
-#define CLEAR		"\33[2K\r"
-#define LENGTH(X)	(sizeof X / sizeof X[0])
-#define ISCHR(c)	(c >= 'a' && c <= 'z')
+#define TICK        500000000
+#define DELTA       (TICK / 10000)
+#define CLEAR	    "\33[2K\r"
+#define LENGTH(X)   (sizeof X / sizeof X[0])
+#define ISCHR(c)    (c >= 'a' && c <= 'z')
 
 typedef struct symbol_t {
 	char sym;
@@ -18,6 +19,7 @@ typedef struct symbol_t {
 } Symbol;
 
 void die(const char *errstr, ...);
+int nsleep(long nsec);
 void snore(double usec);
 double time_to_sec(char *s);
 void time_print(double tm);
@@ -41,6 +43,18 @@ die(const char *errstr, ...) {
 	exit(1);
 }
 
+int
+nsleep(long nsec) {
+        struct timespec req, rem;
+        int r;
+
+        req.tv_sec = 0;
+        req.tv_nsec = nsec;
+        while((r = nanosleep(&req, &rem)) == -1 && errno == EINTR)
+                req = rem;
+        return r;
+}
+
 void
 snore(double usec) {
 	double tm;
@@ -50,7 +64,7 @@ snore(double usec) {
 		printf(" | ");
 		time_print(usec - tm); /* descending */
 		fflush(stdout);
-		usleep(TICK);
+		nsleep(TICK);
 		printf("%s", CLEAR);
 	}
 }

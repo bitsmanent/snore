@@ -106,7 +106,7 @@ main(int argc, char *argv[]) {
 	int i;
 
 	if(argc == 2 && !strcmp("-v", argv[1]))
-		die("snore-"VERSION", © 2016 Claudio Alessi, see LICENSE for details\n");
+		die("snore-"VERSION", © 2017 Claudio Alessi, see LICENSE for details\n");
 	for(i = 1; i < argc; ++i) {
 		tm = time_to_sec(argv[i]);
 		if(tm < 0)

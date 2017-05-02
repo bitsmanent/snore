@@ -6,8 +6,8 @@
 #include <string.h>
 #include <time.h>
 
-#define TICK        500000000
-#define DELTA       (TICK / 10000)
+#define TICK        1000
+#define DELTA       ((double)TICK / 10000000)
 #define CLEAR	    "\33[2K\r"
 #define LENGTH(X)   (sizeof X / sizeof X[0])
 #define ISCHR(c)    (c >= 'a' && c <= 'z')

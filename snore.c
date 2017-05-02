@@ -18,6 +18,7 @@ typedef struct symbol_t {
 } Symbol;
 
 void die(const char *errstr, ...);
+void snore(double usec);
 double time_to_sec(char *s);
 void time_print(double tm);
 
@@ -40,13 +41,26 @@ die(const char *errstr, ...) {
 	exit(1);
 }
 
+void
+snore(double usec) {
+	double tm;
+
+	for(tm = 0; tm < usec; tm += DELTA) {
+		time_print(tm); /* ascending */
+		printf(" | ");
+		time_print(usec - tm); /* descending */
+		fflush(stdout);
+		usleep(TICK);
+		printf("%s", CLEAR);
+	}
+}
+
 double
 time_to_sec(char *s) {
-	int j;
-	double part, calculated;
+	double calculated = 0.0, part;
 	char *parse_end, *string_end;
+	int j;
 
-	calculated = 0.0;
 	string_end = s + strlen(s);
 	while(s < string_end) {
 		part = strtod(s, &parse_end);
@@ -98,18 +112,11 @@ main(int argc, char *argv[]) {
 		tm = time_to_sec(argv[i]);
 		if(tm < 0)
 			die("%s: wrong time\n", argv[i]);
-		endtm += time_to_sec(argv[i]);
+		endtm += tm;
 	}
 	if(!endtm)
 		endtm = symbols[LENGTH(symbols) - 1].mult;
-	for(tm = 0; tm < endtm; tm += DELTA) {
-		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(endtm - tm); /* descending */
-		fflush(stdout);
-		usleep(TICK);
-		printf("%s", CLEAR);
-	}
+	snore(endtm);
 	printf("\a%s elapsed\n", argv[1]);
 	return 0;
 }

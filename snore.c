@@ -116,16 +116,24 @@ main(int argc, char *argv[]) {
 		if(endtm >= UINT_MAX)
 			die("%s: time too large\n", argv[0]);
 	}
+
 	if(!endtm)
-		endtm = symbols[LENGTH(symbols) - 1].mult;
-	for(tm = 0; tm < endtm; tm += DELTA) {
-		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(endtm - tm); /* descending */
-		fflush(stdout);
-		sleepu(TICK);
-		printf("%s", CLEAR);
-	}
+		for (tm = 0;; tm += DELTA) {
+			time_print(tm);
+			fflush(stdout);
+			sleepu(TICK);
+			printf("%s", CLEAR);
+		}
+	else
+		for(tm = 0; tm < endtm; tm += DELTA) {
+			time_print(tm); /* ascending */
+			printf(" | ");
+			time_print(endtm - tm); /* descending */
+			fflush(stdout);
+			sleepu(TICK);
+			printf("%s", CLEAR);
+		}
+
 	printf("\a%s elapsed\n", argv[1]);
 	return 0;
 }

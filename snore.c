@@ -113,16 +113,24 @@ main(int argc, char *argv[]) {
 			die("%s: wrong time\n", argv[i]);
 		endtm += tm;
 	}
+
 	if(!endtm)
-		endtm = symbols[LENGTH(symbols) - 1].mult;
-	for(tm = 0; tm < endtm; tm += DELTA) {
-		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(endtm - tm); /* descending */
-		fflush(stdout);
-		sleepu(TICK);
-		printf("%s", CLEAR);
-	}
+		for (tm = 0;; tm += DELTA) {
+			time_print(tm);
+			fflush(stdout);
+			sleepu(TICK);
+			printf("%s", CLEAR);
+		}
+	else
+		for(tm = 0; tm < endtm; tm += DELTA) {
+			time_print(tm); /* ascending */
+			printf(" | ");
+			time_print(endtm - tm); /* descending */
+			fflush(stdout);
+			sleepu(TICK);
+			printf("%s", CLEAR);
+		}
+
 	printf("\a%s elapsed\n", argv[1]);
 	return 0;
 }

@@ -44,14 +44,14 @@ die(const char *errstr, ...) {
 
 int
 sleepu(double usec) {
-        struct timespec req, rem;
-        int r;
+	struct timespec req, rem;
+	int r;
 
-        req.tv_sec = 0;
-        req.tv_nsec = usec * 1000;
-        while((r = nanosleep(&req, &rem)) == -1 && errno == EINTR)
-                req = rem;
-        return r;
+	req.tv_sec = 0;
+	req.tv_nsec = usec * 1000;
+	while((r = nanosleep(&req, &rem)) == -1 && errno == EINTR)
+		req = rem;
+	return r;
 }
 
 double

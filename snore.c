@@ -1,5 +1,6 @@
 /* See LICENSE for license details. */
 #include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -112,6 +113,8 @@ main(int argc, char *argv[]) {
 		if(tm < 0)
 			die("%s: wrong time\n", argv[i]);
 		endtm += tm;
+		if(endtm >= UINT_MAX)
+			die("%s: time too large\n", argv[0]);
 	}
 	if(!endtm)
 		endtm = symbols[LENGTH(symbols) - 1].mult;

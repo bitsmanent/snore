@@ -108,7 +108,6 @@ main(int argc, char *argv[]) {
 
 	if(argc == 2 && !strcmp("-v", argv[1]))
 		die("snore-"VERSION"\n");
-	setbuf(stdout, NULL);
 	for(i = 1; i < argc; ++i) {
 		tm = time_to_sec(argv[i]);
 		if(tm < 0)
@@ -123,6 +122,7 @@ main(int argc, char *argv[]) {
 		time_print(tm); /* ascending */
 		printf(" | ");
 		time_print(endtm - tm); /* descending */
+		fflush(stdout);
 		sleepu(TICK);
 		printf(CLEAR);
 	}

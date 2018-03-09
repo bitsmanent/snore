@@ -1,8 +1,8 @@
 /* See LICENSE for license details. */
 #include <errno.h>
 #include <limits.h>
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

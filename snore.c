@@ -108,16 +108,19 @@ main(int argc, char *argv[]) {
 
 	if(argc == 2 && !strcmp("-v", argv[1]))
 		die("snore-"VERSION"\n");
-	for(i = 1; i < argc; ++i) {
-		tm = time_to_sec(argv[i]);
-		if(tm < 0)
-			die("%s: wrong time\n", argv[i]);
-		endtm += tm;
-		if(endtm >= UINT_MAX)
-			die("%s: time too large\n", argv[0]);
-	}
-	if(!endtm)
+	if(argc == 1) {
 		endtm = symbols[LENGTH(symbols) - 1].mult;
+	}
+	else {
+		for(i = 1; i < argc; ++i) {
+			tm = time_to_sec(argv[i]);
+			if(tm < 0)
+				die("%s: wrong time\n", argv[i]);
+			endtm += tm;
+			if(endtm >= UINT_MAX)
+				die("%s: time too large\n", argv[0]);
+		}
+	}
 	for(tm = 0; tm < endtm; tm += DELTA) {
 		time_print(tm); /* ascending */
 		printf(" | ");

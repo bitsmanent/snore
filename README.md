@@ -35,4 +35,3 @@ necessary as root):
 Status
 ------
 snore is considered complete and no further development is expected to happen.
-Test

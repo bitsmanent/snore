@@ -7,8 +7,10 @@
 #include <string.h>
 #include <time.h>
 
-#define TICK        0250000
-#define DELTA       ((double)TICK / 1000000)
+#define BILLION     1000000000.0
+#define TICK        250000
+#define TINY_TICK   100
+#define XOVRTM      0.250
 #define CLEAR	    "\33[2K\r"
 #define LENGTH(X)   (sizeof X / sizeof X[0])
 #define ISCHR(c)    (c >= 'a' && c <= 'z')
@@ -23,6 +25,7 @@ void die(const char *errstr, ...);
 int sleepu(double usec);
 double time_to_sec(char *s);
 void time_print(double tm);
+void zzz_loop(struct timespec start_tsp, double stop_tm, double end_tm, double tick);
 
 /* must be in ascending order */
 static Symbol symbols[] = {
@@ -101,9 +104,38 @@ time_print(double tm) {
 	}
 }
 
+
+void
+zzz_loop(struct timespec start_tsp, double stop_tm, double end_tm, double tick){
+	struct timespec current_tsp;
+	double current_tm;
+
+	clock_gettime(CLOCK_REALTIME, &current_tsp);
+	current_tm = (current_tsp.tv_sec - start_tsp.tv_sec) +
+			(current_tsp.tv_nsec - start_tsp.tv_nsec) / BILLION;
+
+	for(    ; current_tm < stop_tm;    ) {
+
+		printf("%.3fs elapsed | %.3fs remaining ", current_tm, end_tm - current_tm);
+#ifndef DISABLE_BUFFERING
+		fflush(stdout);
+#endif
+		sleepu(tick);
+		printf(CLEAR);
+		clock_gettime(CLOCK_REALTIME, &current_tsp);
+		current_tm = (current_tsp.tv_sec - start_tsp.tv_sec) +
+				(current_tsp.tv_nsec - start_tsp.tv_nsec) / BILLION;
+	}
+
+} 
+
+
+
 int
 main(int argc, char *argv[]) {
-	double endtm = 0, tm;
+	struct timespec start,elapsed;
+	clock_gettime(CLOCK_REALTIME, &start);
+	double endtm = 0, tm, elapsed_tm;
 	int i;
 
 	if(argc == 2 && !strcmp("-v", argv[1]))
@@ -121,14 +153,19 @@ main(int argc, char *argv[]) {
 				die("%s: time too large\n", argv[0]);
 		}
 	}
-	for(tm = 0; tm < endtm; tm += DELTA) {
-		time_print(tm); /* ascending */
-		printf(" | ");
-		time_print(endtm - tm); /* descending */
-		fflush(stdout);
-		sleepu(TICK);
-		printf(CLEAR);
-	}
-	printf("\a%s elapsed\n", argv[1]);
+
+#ifdef DISABLE_BUFFERING
+	setvbuf(stdout, NULL, _IONBF, 0);
+#endif
+	zzz_loop(start, endtm-XOVRTM, endtm,      TICK);
+	zzz_loop(start, endtm       , endtm, TINY_TICK);
+
+	clock_gettime(CLOCK_REALTIME, &elapsed);
+	elapsed_tm = (elapsed.tv_sec - start.tv_sec) +
+			(elapsed.tv_nsec - start.tv_nsec) / BILLION;
+
+	time_print(elapsed_tm);
+	printf("\n");
+
 	return 0;
 }

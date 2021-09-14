@@ -129,6 +129,7 @@ main(int argc, char *argv[]) {
 		sleepu(TICK);
 		printf(CLEAR);
 	}
-	printf("\a%s elapsed\n", argv[1]);
+	time_print(tm);
+	printf("\n");
 	return 0;
 }

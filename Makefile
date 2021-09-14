@@ -32,7 +32,7 @@ clean:
 dist: clean
 	@echo creating dist tarball
 	@mkdir -p ${APPNAME}-${VERSION}
-	@cp -R LICENSE Makefile README config.mk \
+	@cp -R LICENSE Makefile README.md config.mk \
 		${APPNAME}.1 ${SRC} ${APPNAME}-${VERSION}
 	@tar -cf ${APPNAME}-${VERSION}.tar ${APPNAME}-${VERSION}
 	@gzip ${APPNAME}-${VERSION}.tar

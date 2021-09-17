@@ -7,8 +7,8 @@
 #include <string.h>
 #include <time.h>
 
-#define TICK        0250000
-#define DELTA       ((double)TICK / 1000000)
+#define BILLION     1000000000.0;
+#define TICK        10000
 #define CLEAR	    "\33[2K\r"
 #define LENGTH(X)   (sizeof X / sizeof X[0])
 #define ISCHR(c)    (c >= 'a' && c <= 'z')
@@ -103,9 +103,11 @@ time_print(double tm) {
 
 int
 main(int argc, char *argv[]) {
+	struct timespec start, current;
 	double endtm = 0, tm;
 	int i;
 
+	clock_gettime(CLOCK_REALTIME, &start);
 	if(argc == 2 && !strcmp("-v", argv[1]))
 		die("snore-"VERSION"\n");
 	if(argc == 1) {
@@ -121,13 +123,16 @@ main(int argc, char *argv[]) {
 				die("%s: time too large\n", argv[0]);
 		}
 	}
-	for(tm = 0; tm < endtm; tm += DELTA) {
+
+	for(tm = 0; tm < endtm; ) {
 		time_print(tm); /* ascending */
 		printf(" | ");
 		time_print(endtm - tm); /* descending */
 		fflush(stdout);
 		sleepu(TICK);
 		printf(CLEAR);
+		clock_gettime(CLOCK_REALTIME, &current);
+		tm = (current.tv_sec - start.tv_sec) + (current.tv_nsec - start.tv_nsec) / BILLION;
 	}
 	time_print(tm);
 	printf("\n");

@@ -119,7 +119,7 @@ main(int argc, char *argv[]) {
 			if(tm < 0)
 				die("%s: wrong time\n", argv[i]);
 			endtm += tm;
-			if(endtm >= UINT_MAX)
+			if(endtm >= INT_MAX)
 				die("%s: time too large\n", argv[0]);
 		}
 	}

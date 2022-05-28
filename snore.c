@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #define BILLION     1000000000.0;
 #define TICK        10000
@@ -16,7 +17,7 @@
 typedef struct symbol_t {
 	char sym;
 	int mult;
-	int precision;
+	unsigned precision;
 } Symbol;
 
 void die(const char *errstr, ...);
@@ -59,7 +60,7 @@ double
 time_to_sec(char *s) {
 	double calculated = 0.0, part;
 	char *parse_end, *string_end;
-	int j;
+	unsigned j;
 
 	string_end = s + strlen(s);
 	while(s < string_end) {
@@ -73,8 +74,6 @@ time_to_sec(char *s) {
 			for(j = 0; j < LENGTH(symbols); ++j) {
 				if(s[0] == symbols[j].sym) {
 					part *= symbols[j].mult;
-					if(part >= UINT_MAX)
-						return -1;
 					s++;
 					break;
 				}
@@ -88,18 +87,19 @@ time_to_sec(char *s) {
 void
 time_print(double tm) {
 	double piece;
-	int i;
-	char buf[10], *p;
+	int i,n;
+	char buf[10];
 
 	for(i = LENGTH(symbols) - 1; i >= 0; --i) {
 		piece = tm / symbols[i].mult;
-		snprintf(buf, sizeof buf, "%09f", piece);
-		p = strrchr(buf, '.');
-		if(symbols[i].precision)
-			p += 1 + symbols[i].precision; /* truncate */
-		*p = '\0';
-		printf("%s%c%s", buf, symbols[i].sym, i ? " " : "");
-		tm -= (int)piece * symbols[i].mult;
+		n = snprintf(buf, sizeof buf, "%%.%uf", symbols[i].precision);
+
+		if(n < 0 || (unsigned)n >= sizeof buf)
+			die("Could not construct format string: got '%s'",buf);
+
+		printf(buf, piece);
+		printf("%c%s", symbols[i].sym, i ? " " : "");
+		tm -= trunc(piece) * symbols[i].mult;
 	}
 }
 
@@ -121,8 +121,9 @@ main(int argc, char *argv[]) {
 			if(tm < 0)
 				die("%s: wrong time\n", argv[i]);
 			endtm += tm;
-			if(endtm >= INT_MAX)
-				die("%s: time too large\n", argv[0]);
+			/* this check excludes NaN */
+			if(!(endtm >= 0 && endtm < INT_MAX))
+				die("%f: time out of range\n", endtm);
 		}
 	}
 

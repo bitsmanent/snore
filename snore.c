@@ -73,6 +73,8 @@ time_to_sec(char *s) {
 			for(j = 0; j < LENGTH(symbols); ++j) {
 				if(s[0] == symbols[j].sym) {
 					part *= symbols[j].mult;
+					if(part >= UINT_MAX)
+						return -1;
 					s++;
 					break;
 				}

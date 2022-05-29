@@ -89,16 +89,10 @@ void
 time_print(double tm) {
 	double piece;
 	int i;
-	char buf[10], *p;
 
 	for(i = LENGTH(symbols) - 1; i >= 0; --i) {
 		piece = tm / symbols[i].mult;
-		snprintf(buf, sizeof buf, "%09f", piece);
-		p = strrchr(buf, '.');
-		if(symbols[i].precision)
-			p += 1 + symbols[i].precision; /* truncate */
-		*p = '\0';
-		printf("%s%c%s", buf, symbols[i].sym, i ? " " : "");
+		printf("%.*f%c%s", symbols[i].precision, piece, symbols[i].sym, i ? " " : "");
 		tm -= (int)piece * symbols[i].mult;
 	}
 }

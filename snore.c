@@ -87,14 +87,14 @@ time_to_sec(char *s) {
 
 void
 time_print(double tm) {
-	double piece;
-	int i;
+	int days = (int)(tm/(24*3600));
+	tm -= days * (24*3600);
+	int hours = (int)(tm/3600);
+	tm -= hours * 3600;
+	int minutes = (int)(tm/60);
+	tm -= minutes * 60;
 
-	for(i = LENGTH(symbols) - 1; i >= 0; --i) {
-		piece = tm / symbols[i].mult;
-		printf("%.*f%c%s", symbols[i].precision, piece, symbols[i].sym, i ? " " : "");
-		tm -= (int)piece * symbols[i].mult;
-	}
+	printf("%dd %dh %dm %.3fs", days, hours, minutes, tm);
 }
 
 int

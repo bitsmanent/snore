@@ -1,5 +1,5 @@
 # snore - sleep with feedback
-VERSION = 0.2
+VERSION = 0.3.1
 
 # Customize below to fit your system
 

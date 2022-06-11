@@ -92,8 +92,10 @@ time_print(double tm) {
 
 	for(i = LENGTH(symbols) - 1; i >= 0; --i) {
 		piece = tm / symbols[i].mult;
+		if(!symbols[i].precision)
+			piece = (int)piece;
 		printf("%.*f%c%s", symbols[i].precision, piece, symbols[i].sym, i ? " " : "");
-		tm -= (int)piece * symbols[i].mult;
+		tm -= piece * symbols[i].mult;
 	}
 }
 

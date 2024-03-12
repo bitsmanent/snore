@@ -13,7 +13,7 @@ order. If no arguments are given, snore pauses for 1d (one day).
 
 SHORTCUTS
 
-    Enter or Ctrl-j  show split time
+    Enter or Ctrl-j  output the split time
 
     Ctrl-s           pause execution
 
